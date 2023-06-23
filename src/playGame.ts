@@ -1,49 +1,31 @@
 import * as readline from 'readline';
-import kleur from 'kleur';
-// import getAsciiArt from './getAsciiArt';
+import { GameParameters } from './game';
+import { getPrompt, show } from './utils';
 
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 })
 
-export default async function playGame(randomNumber: number, prompt: string = "  "): Promise<void> {
+export default async function playGame(gameParams: GameParameters): Promise<void> {
+  let { numberOfTries, randomNumber, prompt = "   " } = gameParams;
 
   rl.question(getPrompt(prompt), (answer: string) => {
     const guess: number = parseInt(answer);
+
     if (isNaN(guess)) {
-      console.log(getFeedback())
-      playGame(randomNumber, prompt)
+      show('error')
+      playGame(gameParams)
       return
     }
-    console.log(getFeedback(randomNumber, guess))
+    numberOfTries++
+    show('feedback', randomNumber, guess)
 
-    guess !== randomNumber ? playGame(randomNumber) : rl.close()
+    if (guess === randomNumber) {
+      show('win', guess)
+      rl.close()
+    } else playGame({ numberOfTries, randomNumber })
   });
 }
 
-const getPrompt = (prompt: string = ""): string => {
-  return kleur.magenta(`${prompt}${kleur.yellow('---❯')} `)
-}
 
-const getFeedback = (randomNumber: number = 0, guess: number = 0): string => {
-  if (guess === randomNumber) {
-    return 'ENDING ASCII ART'
-    // return getAsciiArt('ending config object')
-  }
-
-  return randomNumber === 0 && guess === 0
-    ? getErrorMessage()
-    : getTip(randomNumber, guess)
-}
-
-const getErrorMessage = (): string => {
-  return `Try a ${kleur.bold(kleur.red("number"))}:  `
-}
-
-const getTip = (randomNumber: number, guess: number): string => {
-  let message: string = `${kleur.bgCyan(kleur.bold(kleur.black(guess)))} is too`;
-
-
-  return `${message} ${guess > randomNumber ? kleur.cyan('big!') : kleur.red('small!')}`
-}
