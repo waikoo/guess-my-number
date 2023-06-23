@@ -32,10 +32,11 @@ export const ascii: AsciiObject = {
         if (char === '+') asciiArr[i] = kleur.magenta(char)
         if (char === '-') {
           if (asciiArr[i - 1] === '0') {
-            asciiArr[i] = kleur.cyan(char)
-            asciiArr[i + 1] = kleur.cyan(asciiArr[i + 1])
-            asciiArr[i + 2] = kleur.cyan(asciiArr[i + 2])
-            asciiArr[i + 3] = kleur.cyan(asciiArr[i + 3])
+            asciiArr[i - 1] = kleur.green(asciiArr[i - 1])
+            asciiArr[i] = kleur.green(char)
+            asciiArr[i + 1] = kleur.green(asciiArr[i + 1])
+            asciiArr[i + 2] = kleur.green(asciiArr[i + 2])
+            asciiArr[i + 3] = kleur.green(asciiArr[i + 3])
           } else {
             asciiArr[i] = kleur.green(char)
           }

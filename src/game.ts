@@ -1,21 +1,24 @@
 import * as crypto from 'crypto';
 import playGame from './playGame';
-import { show } from './utils';
+import { showAscii } from './utils';
+import { ascii } from './ascii';
 
 export interface GameParameters {
   numberOfTries: number;
   randomNumber: number;
+  range: string;
   prompt?: string;
 }
 
 const gameParameters: GameParameters = {
-  numberOfTries: 3,
+  numberOfTries: 0,
   randomNumber: crypto.randomInt(1, 100),
-  prompt: "  - Take a guess "
+  range: ascii.start.range,
+  prompt: "  - Take a guess ",
 }
 
 function startGame(): void {
-  show('asciiStart');
+  showAscii('start');
   playGame(gameParameters)
 }
 

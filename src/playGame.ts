@@ -1,6 +1,6 @@
 import * as readline from 'readline';
 import { GameParameters } from './game';
-import { getPrompt, show } from './utils';
+import { showFeedback, showWinningMessage, getPrompt } from './utils';
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -8,23 +8,19 @@ const rl = readline.createInterface({
 })
 
 export default async function playGame(gameParams: GameParameters): Promise<void> {
-  let { numberOfTries, randomNumber, prompt = "   " } = gameParams;
+  let { numberOfTries, randomNumber, range, prompt = "   " } = gameParams;
 
   rl.question(getPrompt(prompt), (answer: string) => {
-    const guess: number = parseInt(answer);
-
-    if (isNaN(guess)) {
-      show('error')
-      playGame(gameParams)
+    numberOfTries++
+    showFeedback(randomNumber, answer, range)
+    
+    const guess = parseInt(answer)
+    if (guess === randomNumber) {
+      showWinningMessage(guess, numberOfTries)
+      rl.close()
       return
     }
-    numberOfTries++
-    show('feedback', randomNumber, guess)
-
-    if (guess === randomNumber) {
-      show('win', guess)
-      rl.close()
-    } else playGame({ numberOfTries, randomNumber })
+    playGame({ numberOfTries, randomNumber, range })
   });
 }
 
