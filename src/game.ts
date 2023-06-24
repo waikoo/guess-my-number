@@ -10,16 +10,23 @@ export interface GameParameters {
   prompt?: string;
 }
 
-const gameParameters: GameParameters = {
-  numberOfTries: 0,
-  randomNumber: crypto.randomInt(1, 100),
-  range: ascii.start.range,
-  prompt: "  - Take a guess ",
-}
+class Game {
+  private gameParameters: GameParameters
 
-function startGame(): void {
-  showAscii('start');
-  playGame(gameParameters)
-}
+  constructor() {
+    this.gameParameters = {
+      numberOfTries: 0,
+      randomNumber: crypto.randomInt(1, 100),
+      range: ascii.start.range,
+      prompt: "  - Take a guess ",
+    }
+  }
 
-startGame()
+  public start(): void {
+    showAscii('start');
+    playGame(this.gameParameters)
+
+  }
+}
+const game = new Game()
+game.start()
