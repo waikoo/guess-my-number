@@ -9,7 +9,10 @@ interface AsciiContent {
 }
 
 interface AsciiStartContent extends AsciiContent {
-  range: string;
+  range: {
+    value: string;
+    setRange: (range: string) => void;
+  } 
   getColoredRange: () => string;
 }
 
@@ -21,7 +24,12 @@ interface AsciiObject {
 export const ascii: AsciiObject = {
   start: {
     text: 'Guess My Number',
-    range: '0-100',
+    range: {
+      value: '',
+      setRange(range: string) {
+        this.value = range
+      }
+    },
     colored: [],
     art: '',
     colorize() {
@@ -48,7 +56,7 @@ export const ascii: AsciiObject = {
       return kleur.magenta(kleur.bold(ascii.start.text))
     },
     getColoredRange() {
-      return kleur.cyan(ascii.start.range)
+      return kleur.cyan(ascii.start.range.value)
     }
   },
   end: {
@@ -88,3 +96,4 @@ ascii.end.art = `
 ascii.start.colorize()
 ascii.end.colorize()
 
+export const asciiStart = ascii.start.range
