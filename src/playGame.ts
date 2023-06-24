@@ -7,21 +7,40 @@ const rl = readline.createInterface({
   output: process.stdout
 })
 
+// export default async function playGame(gameParams: GameParameters): Promise<void> {
+//   let { numberOfTries, randomNumber, range, prompt = "   " } = gameParams;
+//
+//   rl.question(getPrompt(prompt), (answer: string) => {
+//     numberOfTries++
+//     showFeedback(randomNumber, answer, range)
+//     
+//     const guess = parseInt(answer)
+//     if (guess === randomNumber) {
+//       showWinningMessage(guess, numberOfTries)
+//       rl.close()
+//       return
+//     }
+//     playGame({ numberOfTries, randomNumber, range })
+//   });
+// }
+
+
 export default async function playGame(gameParams: GameParameters): Promise<void> {
   let { numberOfTries, randomNumber, range, prompt = "   " } = gameParams;
 
-  rl.question(getPrompt(prompt), (answer: string) => {
-    numberOfTries++
-    showFeedback(randomNumber, answer, range)
-    
-    const guess = parseInt(answer)
-    if (guess === randomNumber) {
-      showWinningMessage(guess, numberOfTries)
-      rl.close()
-      return
-    }
-    playGame({ numberOfTries, randomNumber, range })
+  const answer = await new Promise<string>((resolve) => {
+    rl.question(getPrompt(prompt), resolve);
   });
+
+  numberOfTries++;
+  showFeedback(randomNumber, answer, range);
+
+  const guess = Number(answer);
+  if (guess === randomNumber) {
+    showWinningMessage(guess, numberOfTries);
+    rl.close();
+    return;
+  }
+
+  await playGame({ numberOfTries, randomNumber, range });
 }
-
-
