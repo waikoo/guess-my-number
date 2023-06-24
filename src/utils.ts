@@ -12,7 +12,7 @@ const showWinningMessage = (guess: number, tries: number): void => {
 
 const showFeedback = (randomNumber: number = 0, answer: string, range: string)  => {
   const guess = Number(answer)
-  let feedback = ''
+  let feedback: string | null = ''
 
   const isError = handleError(answer, guess, range)
   feedback = isError || getTip(randomNumber, guess)
@@ -20,8 +20,8 @@ const showFeedback = (randomNumber: number = 0, answer: string, range: string)  
   console.log(feedback)
 }
 
-const getTip = (randomNumber: number, guess: number): string => {
-  if (randomNumber === guess) return ''
+const getTip = (randomNumber: number, guess: number): string | null => {
+  if (randomNumber === guess) return null
 
   const isGuessSmall = guess < randomNumber
   const bgColor = isGuessSmall ? kleur.bgRed : kleur.bgYellow
