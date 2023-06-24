@@ -1,5 +1,11 @@
 import kleur from 'kleur'
 
+enum ErrorType {
+  Main = 'ERROR',
+  InvalidInput = 'Invalid input',
+  NotWithinRange = 'Not within range',
+}
+
 const handleError = (answer: string, guess: number, range: string): string  => {
   let error = ''
 
@@ -9,9 +15,10 @@ const handleError = (answer: string, guess: number, range: string): string  => {
 }
 
 const getErrorMessage = (type: string, feedback: string): string => {
-  const error = kleur.bgRed(kleur.black(kleur.bold(`ERROR: ${type}`)))
+  const colorize = (error: string) => kleur.bgRed(kleur.black(kleur.bold(error)))
+  const message = `${ErrorType.Main}: ${type}`
 
-  return `${error} ${feedback}\n`
+  return `${colorize(message)} ${feedback}\n`
 }
 
 const includesNonNumbers = (answer: string) => {
@@ -21,10 +28,10 @@ const includesNonNumbers = (answer: string) => {
 }
 
 const getInvalidInputError = (): string => {
-  const type = 'Invalid input'
+  const type = ErrorType.InvalidInput
+  const colorize = (text: string) => kleur.bold(kleur.red(text))
 
-  const coloredNumber = kleur.bold(kleur.red("number"))
-  const feedback = `Try a ${coloredNumber}.`
+  const feedback = `Try a ${colorize("number")}.`
 
   return getErrorMessage(type, feedback)
 }
@@ -37,11 +44,11 @@ const isOutOfRange = (guess: number, range: string) => {
 }
 
 const getRangeError = (range: string): string => {
-  const getColored = (number: string) => kleur.bold(kleur.red(number))
-  const type = 'Not within range'
+  const colorize = (number: string) => kleur.bold(kleur.red(number))
+  const type = ErrorType.NotWithinRange
   const [rangeStart, rangeEnd] = range.split('-')
 
-  const feedback = `Try a number between ${getColored(rangeStart)} and ${getColored(rangeEnd)}.`
+  const feedback = `Try a number between ${colorize(rangeStart)} and ${colorize(rangeEnd)}.`
   return getErrorMessage(type, feedback)
 }
 
