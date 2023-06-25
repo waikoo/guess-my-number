@@ -4,13 +4,15 @@ enum ErrorType {
   Main = 'ERROR',
   InvalidInput = 'Invalid input',
   NotWithinRange = 'Not within range',
+  InvalidRange = 'Invalid range'
 }
 
-const handleError = (answer: string, guess: number, range: string): string  => {
+const handleError = (answer: string, range: string): string  => {
   let error = ''
 
+  if (isInputInvalid(answer, range)) error = getInvalidRangeError(range)
   if (includesNonNumbers(answer)) error = getInvalidInputError()
-  if (isOutOfRange(guess, range)) error = getRangeError(range)
+  if (isOutOfRange(answer, range)) error = getRangeError(range)
   return error
 }
 
@@ -36,10 +38,14 @@ const getInvalidInputError = (): string => {
   return getErrorMessage(type, feedback)
 }
 
-const getNumbersFromRange = (range: string): number[] => range.split('-').map(Number)
+const getNumbersFromRange = (range: string): number[] => {
+  return range.split('-').map(Number)
+}
 
-const isOutOfRange = (guess: number, range: string) => {
+const isOutOfRange = (answer: string, range: string) => {
+  const guess = Number(answer)
   const [rangeStart, rangeEnd] = getNumbersFromRange(range)
+
   return guess < rangeStart || guess > rangeEnd
 }
 
@@ -49,6 +55,20 @@ const getRangeError = (range: string): string => {
   const [rangeStart, rangeEnd] = range.split('-')
 
   const feedback = `Try a number between ${colorize(rangeStart)} and ${colorize(rangeEnd)}.`
+  return getErrorMessage(type, feedback)
+}
+
+const isInputInvalid = (answer: string, range: string) => {
+  return /[1-5]/.test(answer) && !range
+}
+
+const getInvalidRangeError = (range: string): string => {
+  const type = ErrorType.InvalidRange
+  const colorize = (range: number) => kleur.red(kleur.bold(range))
+
+  const [rangeStart, rangeEnd] = getNumbersFromRange(range)
+  const feedback = `Try a range between ${colorize(rangeStart)} and ${colorize(rangeEnd)}`
+
   return getErrorMessage(type, feedback)
 }
 

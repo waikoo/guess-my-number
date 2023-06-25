@@ -1,99 +1,102 @@
 import kleur from 'kleur'
+import { formatThousands } from './utils'
+import { range as rangePreset } from './menu'
 
-interface AsciiContent {
-  text: string;
-  colored: string[];
-  art: string;
-  colorize: () => void;
-  getColoredText: () => string;
+export class AsciiFactory {
+  private customRange: string = rangePreset[0]
+
+  constructor(range: string) {
+    this.customRange = range
+  }
+  get getArt() {
+    return new AsciiStart(this.customRange).getArt
+  }
 }
 
-interface AsciiStartContent extends AsciiContent {
-  range: {
-    value: string;
-    setRange: (range: string) => void;
-  } 
-  getColoredRange: () => string;
+class AsciiStart {
+  private customRange: string;
+  private coloredCustomRange: string
+  private title: string = 'Guess My Number'
+  private coloredTitle: string = kleur.magenta(kleur.bold(this.title))
+
+  constructor(range: string) {
+    this.customRange = range
+    this.coloredCustomRange = kleur.green(formatThousands(this.customRange))
+  }
+
+  get getArt() {
+    return new Pattern(this.customRange, this.coloredCustomRange, this.coloredTitle).getPattern(4)
+  }
 }
 
-interface AsciiObject {
-  start: AsciiStartContent;
-  end: AsciiContent;
-}
+class Pattern {
+  private pattern = '+---+---+---+---+---+---+---+---+---+'
+  private jaggedPattern = this.getColored('+---+---+ +---+---+')
+  private coloredPattern = this.getColored(this.pattern)
+  private customRange: string
+  private coloredCustomRange: string
+  private coloredTitle: string
 
-export const ascii: AsciiObject = {
-  start: {
-    text: 'Guess My Number',
-    range: {
-      value: '',
-      setRange(range: string) {
-        this.value = range
-      }
-    },
-    colored: [],
-    art: '',
-    colorize() {
-      const asciiArr = this.art.split('')
+  constructor(customRange: string, coloredCustomRange: string, coloredTitle: string) {
+    this.customRange = customRange
+    this.coloredCustomRange = coloredCustomRange
+    this.coloredTitle = coloredTitle
+  }
 
-      asciiArr.forEach((char: string, i: number) => {
-        if (char !== '+' && char !== '-') return
-        if (char === '+') asciiArr[i] = kleur.magenta(char)
-        if (char === '-') {
-          if (asciiArr[i - 1] === '0') {
-            asciiArr[i - 1] = kleur.green(asciiArr[i - 1])
-            asciiArr[i] = kleur.green(char)
-            asciiArr[i + 1] = kleur.green(asciiArr[i + 1])
-            asciiArr[i + 2] = kleur.green(asciiArr[i + 2])
-            asciiArr[i + 3] = kleur.green(asciiArr[i + 3])
-          } else {
-            asciiArr[i] = kleur.green(char)
-          }
+  public getPattern(numRows: number) {
+    const coloredPlacedTitle = this.placeInPattern(this.coloredTitle, 'Guess')
+    const coloredPlacedRange = this.placeInPattern(this.coloredCustomRange, this.customRange)
+
+    const art = [this.coloredPattern, coloredPlacedTitle]
+    if (numRows === 4) art.push(coloredPlacedRange)
+    art.push(this.coloredPattern)
+
+    return art.join('\n')
+  }
+
+  private placeInPattern(coloredString: string, range: string): string {
+
+    const padding: { [key: string]: number }= {
+      Guess: 2,
+      '0-1000000': 4,
+      '0-100000': 5,
+      '0-10000': 5,
+      '0-1000': 6,
+      '0-100': 7,
+    }
+
+    const [start, end] = this.jaggedPattern.split(' ')
+    const padNr = padding[range]
+    const stringWithEndPad = `${start}${this.getPadded(coloredString, padNr, range === '0-10000')}${end}`
+    return stringWithEndPad
+  }
+
+  private getPadded(string: string, padding: number, isUneven: boolean = false): string {
+    const pad = ' '.repeat(padding)
+    const startPad = isUneven ? pad + ' ' : pad
+    const textInPattern = `${startPad}${string}${pad}`
+    return textInPattern
+  }
+
+  private getColored(pattern: string, isInversed: boolean = false): string {
+    return pattern
+      .split('')
+      .map((char: string) => {
+        if (char === '+') {
+          return isInversed ? kleur.magenta(char) : kleur.green(char)
+        } else if (char === '-') {
+          return isInversed ? kleur.green(char) : kleur.magenta(char)
+        } else {
+          return char
         }
       })
-      this.art = asciiArr.join('')
-    },
-    getColoredText() {
-      return kleur.magenta(kleur.bold(ascii.start.text))
-    },
-    getColoredRange() {
-      return kleur.cyan(ascii.start.range.value)
-    }
-  },
-  end: {
-    text: 'YOU WIN!',
-    colored: [],
-    art: '',
-    colorize() {
-      const asciiArr = this.art.split('')
-
-      asciiArr.forEach((char: string, index: number) => {
-        if (char === '+' || char === '-') {
-          const color = char === '+' ? 'green' : 'magenta'
-          asciiArr[index] = kleur[color](asciiArr[index])
-        }
-      })
-      this.art = asciiArr.join('')
-    },
-    getColoredText() {
-      return kleur.green(kleur.bold(ascii.end.text))
-    }
-  },
+      .join('')
+  }
 }
-
-ascii.start.art = ` 
-  +---+---+---+---+---+---+---+---+---+
-  +---+---+  ${ascii.start.getColoredText()}  +---+---+
-  +---+---+---+   ${ascii.start.getColoredRange()}   +---+---+---+
-  +---+---+---+---+---+---+---+---+---+
-`
-
-ascii.end.art = `
-  +---+---+---+---+---+---+---+---+---+
-  +---+---+---+  ${ascii.end.getColoredText()} +---+---+---+
-  +---+---+---+---+---+---+---+---+---+
-`
-
-ascii.start.colorize()
-ascii.end.colorize()
-
-export const asciiStart = ascii.start.range
+  // getEndAscii(): string {
+  //   const title = 'YOU WIN!'
+  //   const art = this.generateArt(title, 3)
+  //   const coloredArt = this.colorize(art)
+  //
+  //   return coloredArt
+  // }
