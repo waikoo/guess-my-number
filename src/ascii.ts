@@ -2,61 +2,72 @@ import kleur from 'kleur'
 import { formatThousands } from './utils'
 import { range as rangePreset } from './menu'
 
-export class AsciiFactory {
+interface Padding {
+  [key: string]: number
+}
+
+interface AsciiOptions {
+  title: string
+  numRows: number
+  range?: string
+}
+
+export class AsciiMaker {
   private customRange: string = rangePreset[0]
 
   constructor(range: string) {
     this.customRange = range
   }
-  get getArt() {
-    return new AsciiStart(this.customRange).getArt
+  public getGameStartAscii() {
+    const startOptions: AsciiOptions = {
+      title: 'Guess My Number',
+      numRows: 4,
+      range: this.customRange,
+    }
+    return new Pattern(startOptions).getPattern()
   }
-}
-
-class AsciiStart {
-  private customRange: string;
-  private coloredCustomRange: string
-  private title: string = 'Guess My Number'
-  private coloredTitle: string = kleur.magenta(kleur.bold(this.title))
-
-  constructor(range: string) {
-    this.customRange = range
-    this.coloredCustomRange = kleur.green(formatThousands(this.customRange))
-  }
-
-  get getArt() {
-    return new Pattern(this.customRange, this.coloredCustomRange, this.coloredTitle).getPattern(4)
+  public getGameOverAscii() {
+    const endOptions: AsciiOptions = {
+      title: 'YOU WIN!',
+      numRows: 3
+    }
+    return new Pattern(endOptions).getPattern()
   }
 }
 
 class Pattern {
-  private pattern = '+---+---+---+---+---+---+---+---+---+'
-  private jaggedPattern = this.getColored('+---+---+ +---+---+')
-  private coloredPattern = this.getColored(this.pattern)
-  private customRange: string
-  private coloredCustomRange: string
+  private pattern: {
+    template: string
+    jagged: string
+    coloredTemplate: string
+  }
+  private range: {
+    custom?: string
+    coloredCustom: string
+  }
   private coloredTitle: string
+  private numRows: number
+  private padding: Padding
 
-  constructor(customRange: string, coloredCustomRange: string, coloredTitle: string) {
-    this.customRange = customRange
-    this.coloredCustomRange = coloredCustomRange
-    this.coloredTitle = coloredTitle
-  }
+  constructor(startOptions: AsciiOptions) {
+    const { title, range, numRows } = startOptions
 
-  public getPattern(numRows: number) {
-    const coloredPlacedTitle = this.placeInPattern(this.coloredTitle, 'Guess')
-    const coloredPlacedRange = this.placeInPattern(this.coloredCustomRange, this.customRange)
+    this.pattern = {
+      template: '+---+---+---+---+---+---+---+---+---+',
+      coloredTemplate: '',
+      jagged: this.getColored('+---+---+ +---+---+'),
+    }
+    this.pattern.coloredTemplate = this.getColored(this.pattern.template),
+    this.range = {
+      custom: range,
+      coloredCustom: ''
+    },
+    this.range.coloredCustom = kleur.green(formatThousands(this.range.custom || ''))
+    // is regular title needed?
+    this.coloredTitle = kleur.magenta(kleur.bold(title))
+    this.numRows = numRows
 
-    const art = [this.coloredPattern, coloredPlacedTitle]
-    if (numRows === 4) art.push(coloredPlacedRange)
-    art.push(this.coloredPattern)
-
-    return art.join('\n')
-  }
-
-  private placeInPattern(coloredString: string, range: string): string {
-
-    const padding: { [key: string]: number }= {
+    this.padding = {
       Guess: 2,
       '0-1000000': 4,
       '0-100000': 5,
@@ -64,9 +75,23 @@ class Pattern {
       '0-1000': 6,
       '0-100': 7,
     }
+  }
 
-    const [start, end] = this.jaggedPattern.split(' ')
-    const padNr = padding[range]
+  public getPattern() {
+    const coloredPlacedTitle = this.placeInPattern(this.coloredTitle, 'Guess')
+    const coloredPlacedRange = this.placeInPattern(this.range.coloredCustom, this.range.custom || '')
+
+    const art = [this.pattern.coloredTemplate, coloredPlacedTitle]
+    if (this.numRows === 4) art.push(coloredPlacedRange)
+    art.push(this.pattern.coloredTemplate)
+
+    return art.join('\n')
+  }
+
+  private placeInPattern(coloredString: string, range: string): string {
+    if (range === '') return ''
+    const [start, end] = this.pattern.jagged.split(' ')
+    const padNr = this.padding[range]
     const stringWithEndPad = `${start}${this.getPadded(coloredString, padNr, range === '0-10000')}${end}`
     return stringWithEndPad
   }
@@ -93,10 +118,10 @@ class Pattern {
       .join('')
   }
 }
-  // getEndAscii(): string {
-  //   const title = 'YOU WIN!'
-  //   const art = this.generateArt(title, 3)
-  //   const coloredArt = this.colorize(art)
-  //
-  //   return coloredArt
-  // }
+// getEndAscii(): string {
+//   const title = 'YOU WIN!'
+//   const art = this.generateArt(title, 3)
+//   const coloredArt = this.colorize(art)
+//
+//   return coloredArt
+// }

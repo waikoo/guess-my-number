@@ -13,6 +13,7 @@ const handleError = (answer: string, range: string): string  => {
   if (isInputInvalid(answer, range)) error = getInvalidRangeError(range)
   if (includesNonNumbers(answer)) error = getInvalidInputError()
   if (isOutOfRange(answer, range)) error = getRangeError(range)
+
   return error
 }
 
@@ -27,6 +28,7 @@ const includesNonNumbers = (answer: string) => {
   return answer
     .split('')
     .some(char => isNaN(Number(char)))
+    || answer === ''
 }
 
 const getInvalidInputError = (): string => {

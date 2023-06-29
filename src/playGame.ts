@@ -1,29 +1,38 @@
 import * as readline from 'readline';
 import { GameParameters } from './game';
-import { showFeedback, showWinningMessage} from './utils';
-import {getPrompt} from './menu'
+import { menu } from './menu';
+import { handleError } from './error';
 
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 })
 
+
 export default async function playGame(gameParams: GameParameters): Promise<void> {
-  let { numberOfTries, randomNumber, range, prompt = "   " } = gameParams;
+  let { numberOfTries, randomNumber, range, prompt } = gameParams;
+
+  rl.on('line', (line) => {
+    if (line === '') {
+      console.log('online')
+      handleError(line, range)// test run
+      playGame({ numberOfTries, randomNumber, range, prompt })
+    }
+  })
 
   const answer = await new Promise<string>((resolve) => {
-    rl.question(getPrompt(prompt), resolve);
+    rl.question(prompt, resolve);
   });
 
   numberOfTries++;
-  showFeedback(randomNumber, answer, range);
+  menu.showFeedback(randomNumber, answer, range);
 
   const guess = Number(answer);
   if (guess === randomNumber) {
-    showWinningMessage(guess, numberOfTries);
+    menu.showOnGameOver(guess, numberOfTries);
     rl.close();
     return;
   }
 
-  await playGame({ numberOfTries, randomNumber, range });
+  await playGame({ numberOfTries, randomNumber, range, prompt });
 }
