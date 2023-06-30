@@ -1,19 +1,18 @@
 import kleur from 'kleur'
-import { getPrompt, range } from './menu'
+import { getPrompt, range, padLine } from './menu'
 import { formatThousands } from './utils'
 
-const welcomeMessage = `
-${kleur.magenta(
-  `${getTitle()}
+const welcomeMessage = 
+`${kleur.magenta(
+`${padLine()}${getTitle()}
 
 
-    ${getWelcomePrompt()}
+${padLine()}${getWelcomePrompt()}
 
-  ${getPresets()}
-    ${getWhatToPress()}
-  ${getPrompt()}
-
- `)}`
+${padLine()}${getPresets()}
+${padLine()}${getWhatToPress()}
+${padLine()}${getPrompt()} `)
+}`
 
 
 function getTitle(): string {

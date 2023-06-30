@@ -13,16 +13,17 @@ interface AsciiOptions {
 }
 
 export class AsciiMaker {
-  private customRange: string = rangePreset[0]
+  private customRange: string | null
 
-  constructor(range: string) {
-    this.customRange = range
+  constructor(range?: string | undefined) {
+    this.customRange = range || null
   }
+
   public getGameStartAscii() {
     const startOptions: AsciiOptions = {
       title: 'Guess My Number',
       numRows: 4,
-      range: this.customRange,
+      range: this.customRange || rangePreset[0],
     }
     return new Pattern(startOptions).getPattern()
   }
@@ -69,6 +70,7 @@ class Pattern {
 
     this.padding = {
       Guess: 2,
+      'YOU WIN!': 5,
       '0-1000000': 4,
       '0-100000': 5,
       '0-10000': 5,
@@ -78,21 +80,27 @@ class Pattern {
   }
 
   public getPattern() {
-    const coloredPlacedTitle = this.placeInPattern(this.coloredTitle, 'Guess')
+    const coloredPlacedTitle = this.placeInPattern(this.coloredTitle, 
+    this.numRows === 4 ? 'Guess' : 'YOU WIN!')
     const coloredPlacedRange = this.placeInPattern(this.range.coloredCustom, this.range.custom || '')
 
     const art = [this.pattern.coloredTemplate, coloredPlacedTitle]
     if (this.numRows === 4) art.push(coloredPlacedRange)
     art.push(this.pattern.coloredTemplate)
 
-    return art.join('\n')
+    return art
+      .map(line => `    ${line}`)
+      .join('\n')
   }
 
   private placeInPattern(coloredString: string, range: string): string {
     if (range === '') return ''
+
     const [start, end] = this.pattern.jagged.split(' ')
     const padNr = this.padding[range]
-    const stringWithEndPad = `${start}${this.getPadded(coloredString, padNr, range === '0-10000')}${end}`
+    const isRange = range === '0-10000'
+    const isUneven = this.numRows === 4 ? isRange : true
+    const stringWithEndPad = `${start}${this.getPadded(coloredString, padNr, isUneven)}${end}`
     return stringWithEndPad
   }
 
@@ -118,10 +126,3 @@ class Pattern {
       .join('')
   }
 }
-// getEndAscii(): string {
-//   const title = 'YOU WIN!'
-//   const art = this.generateArt(title, 3)
-//   const coloredArt = this.colorize(art)
-//
-//   return coloredArt
-// }

@@ -12,30 +12,27 @@ export const getPrompt = (prompt: string = ""): string => {
   return kleur.magenta(`${prompt}${kleur.green('---❯')} `)
 }
 
+const MENU_PADDING = 4
+export const padLine = () => ''.padStart(MENU_PADDING, ' ')
+
 import kleur from 'kleur'
 import { handleError } from './error'
-import  welcomeMessage  from './welcomeMessage'
+import welcomeMessage from './welcomeMessage'
 
 interface Menu {
   welcomeMessage: string;
-  showOnGameOver(guess: number, tries: number): void;
   prompt: string;
+  endGamePrompt: string;
   showFeedback(randomNumber: number, answer: string, range: string): void;
   getTip(randomNumber: number, guess: number): string | null;
+  showOnGameOver(guess: number, tries: number): void;
+  showError(option: string): void;
 }
 
 const menu: Menu = {
   welcomeMessage: welcomeMessage,
-
-  showOnGameOver: (guess: number, tries: number): void => {
-    const coloredNumber = kleur.bold(kleur.bgMagenta(kleur.black(guess)))
-    const message = `  You guessed my number: ${coloredNumber} in ${tries} tries!`
-    const coloredMessage = kleur.green(kleur.bold(message))
-
-    console.log(coloredMessage)
-  },
-
-  prompt: getPrompt('  - Take a guess '),
+  prompt: getPrompt(`${padLine()}- Take a guess `),
+  endGamePrompt: getPrompt(`\n${padLine()}- Try again? (y/n)`),
 
   showFeedback(randomNumber: number = 0, answer: string, range: string) {
     const guess = Number(answer)
@@ -44,7 +41,7 @@ const menu: Menu = {
     const isError = handleError(answer, range)
     feedback = isError || this.getTip(randomNumber, guess)
 
-    console.log(feedback)
+    if (feedback) console.log(feedback)
   },
 
   getTip(randomNumber: number, guess: number): string | null {
@@ -58,7 +55,20 @@ const menu: Menu = {
     const message = `${coloredGuess} is too ${bigOrSmall}\n`
 
     return message
-  }
+  },
+
+  showError(option: string): void {
+    console.log(handleError(option))
+  },
+
+  showOnGameOver: (guess: number, tries: number): void => {
+    const coloredNumber = kleur.bold(kleur.bgMagenta(kleur.black(guess)))
+    const message = `\n  You guessed my number: ${coloredNumber} in ${tries} tries!`
+    const coloredMessage = kleur.green(kleur.bold(message))
+
+    console.log(coloredMessage)
+  },
+
 }
 
 
