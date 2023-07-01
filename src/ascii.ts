@@ -27,12 +27,13 @@ export class AsciiMaker {
     }
     return new Pattern(startOptions).getPattern()
   }
+
   public getGameOverAscii() {
     const endOptions: AsciiOptions = {
       title: 'YOU WIN!',
       numRows: 3
     }
-    return new Pattern(endOptions).getPattern()
+    return '\n' + new Pattern(endOptions).getPattern()
   }
 }
 
