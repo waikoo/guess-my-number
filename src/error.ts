@@ -14,8 +14,8 @@ const handleError = (answer: string, range?: string): string => {
   if (range) {
     if (includesNonNumbers(answer)) error = getInvalidInputError()
     if (isOutOfRange(answer, range)) error = getRangeError(range)
-  } else {
-    if (isPresetNotValid(answer)) error = getInvalidRangeError()
+  } else if (isPresetNotValid(answer) || includesNonNumbers(answer)) {
+    error = getInvalidRangeError()
   }
 
   return error
@@ -31,11 +31,8 @@ const getInvalidRangeError = (range?: string): string => {
 
   const [rangeStart, rangeEnd] = getNumbersFromRange(range || '1-5')
 
-  const feedback = `Try a range between ${
-    colorize(rangeStart)
-  } and ${
-    colorize(formatThousands(rangeEnd.toString()))
-  }`
+  const feedback = `Try a range between ${colorize(rangeStart)} and ${colorize(formatThousands(rangeEnd.toString()))
+    }`
 
   return getErrorMessage(type, feedback)
 }
