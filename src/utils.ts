@@ -1,4 +1,6 @@
 import kleur from "kleur";
+import { range } from './menu'
+import { handleError } from "./error";
 
 const insertDots = (value: string) => {
   const reversed = value.split('').reverse();
@@ -43,11 +45,37 @@ function formatRange(range: string): string {
   return `${kleur.green(start)} ${kleur.magenta('-')} ${kleur.green(end)}`
 }
 
+const isValidSegmented = (number: string, range: string[]) => {
+  const rangeCaps = range.map(number => number.split('-')[1])
+  if (rangeCaps.some(num => number === num)) return true
+
+  if (number[0] === '.' || number[number.length - 1] === '.') {
+    return false
+  }
+
+  if (number.includes('-')) {
+    return number.split('-')[1].includes('.')
+  }
+
+  return number.includes('.')
+}
+
+const removeSegmentation = (number: string) => {
+  if (Number(number.replaceAll('.', ''))) {
+    return number.replaceAll('.', '')
+  } else {
+    return null
+  }
+  // return handleError(number, range)
+}
+
 export {
   formatThousands,
   isValidChoice,
+  isValidSegmented,
+  removeSegmentation,
   getChosenPreset,
   getRange,
   padMenuLine,
-  formatRange
+  formatRange,
 }

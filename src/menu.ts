@@ -10,6 +10,7 @@ import kleur from 'kleur'
 import { handleError } from './error'
 import getWelcomeMessage from './getWelcomeMessage'
 import { Omit, TRange, RangePreset } from './types'
+import { isValidSegmented } from './utils'
 
 const range: TRange = Object.values(RangePreset) as TRange;
 
@@ -32,11 +33,14 @@ const menu: Menu = {
   prompt: getPrompt(`- Take a guess `),
   endGamePrompt: getPrompt(`\n${padLine()}- Try again? (${kleur.green(kleur.bold(`y`))}/${kleur.red(kleur.bold(`n`))}) `),
 
-  showFeedback(randomNumber: number = 0, answer: string, range: string) {
+  showFeedback(randomNumber: number = 0, answer: string, rangeStr: string) {
     const guess = Number(answer)
     let feedback: string | null = ''
 
-    const isError = handleError(answer, range)
+    // if (answer.includes('.') && isValidSegmented(answer, range)) {
+    //   return null
+    // }
+    const isError = handleError(answer, rangeStr)
     feedback = isError || this.getTip(randomNumber, guess)
 
     if (feedback) console.log(feedback)
