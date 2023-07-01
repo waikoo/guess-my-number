@@ -1,3 +1,5 @@
+const MENU_PADDING = 4
+
 enum RangePreset {
   'ZeroToHundred' = '0-100',
   'ZeroToThousand' = '0-1000',
@@ -9,18 +11,18 @@ type TRange = RangePreset[]
 const range: TRange = Object.values(RangePreset) as TRange;
 
 export const getPrompt = (prompt: string = ""): string => {
-  return kleur.magenta(`${prompt}${kleur.green('---❯')} `)
+  return kleur.magenta(`${padLine()}${prompt}${kleur.green('---❯')} `)
 }
 
-const MENU_PADDING = 4
 export const padLine = () => ''.padStart(MENU_PADDING, ' ')
 
 import kleur from 'kleur'
 import { handleError } from './error'
-import welcomeMessage from './welcomeMessage'
+import getWelcomeMessage from './welcomeMessage'
+import { Omit } from './game'
 
 interface Menu {
-  welcomeMessage: string;
+  welcomeMessage(omitObject: Omit): string;
   prompt: string;
   endGamePrompt: string;
   showFeedback(randomNumber: number, answer: string, range: string): void;
@@ -30,9 +32,13 @@ interface Menu {
 }
 
 const menu: Menu = {
-  welcomeMessage: welcomeMessage,
-  prompt: getPrompt(`${padLine()}- Take a guess `),
-  endGamePrompt: getPrompt(`\n${padLine()}- Try again? (y/n)`),
+  welcomeMessage(omitObject: Omit): string {
+    const { title, welcome } = omitObject
+
+    return welcome ? '' : getWelcomeMessage(title)
+  },
+  prompt: getPrompt(`- Take a guess `),
+  endGamePrompt: getPrompt(`\n${padLine()}- Try again? (${kleur.green(kleur.bold(`y`))}/${kleur.red(kleur.bold(`n`))}) `),
 
   showFeedback(randomNumber: number = 0, answer: string, range: string) {
     const guess = Number(answer)
@@ -72,4 +78,4 @@ const menu: Menu = {
 }
 
 
-export { menu, range }
+export { menu, range, Menu, Omit }
