@@ -15,8 +15,10 @@ const formatThousands = (number: string) => {
     : `${start}-${insertDots(end)}`;
 }
 
-const isValidChoice = (presetNum: number) => {
-  return presetNum >= 1 && presetNum <= 5
+const isValidChoice = (presetNum: string) => {
+  const number = getChosenPreset(presetNum)
+  if (isNaN(number)) return false
+  return number >= 1 && number <= 5
 }
 
 const getChosenPreset = (answer: string): number => {
@@ -27,7 +29,6 @@ const getRange = (range: string | undefined, rangePreset: string) => {
   if (range !== rangePreset[0]) return range
   if (range === undefined) return null
   return range
-  // if (range === undefined) return rangePreset[0]
 }
 
 const padMenuLine = (line: string) => {
@@ -39,5 +40,5 @@ export {
   isValidChoice,
   getChosenPreset,
   getRange,
-  padMenuLine
+  padMenuLine,
 }
