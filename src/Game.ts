@@ -41,7 +41,6 @@ class Game {
     }
   }
 
-
   public setParams(range: string): void {
     this.gameParams.range = range
     this.gameParams.randomNumber = crypto.randomInt(0, Number(range.split('-')[1]))
@@ -62,5 +61,4 @@ class Game {
   }
 }
 
-const game = new Game()
-game.start()
+new Game().start()
