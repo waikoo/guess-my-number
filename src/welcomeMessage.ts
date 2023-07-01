@@ -2,9 +2,10 @@ import kleur from 'kleur'
 import { getPrompt, range, padLine } from './menu'
 import { formatThousands } from './utils'
 
-const welcomeMessage = 
+const getWelcomeMessage = (omitTitle: boolean = false) => {
+  return (
 `${kleur.magenta(
-`\n${padLine()}${getTitle()}
+`\n${omitTitle ? '' : padLine() + getTitle()}
 
 
 ${padLine()}${getWelcomePrompt()}
@@ -12,8 +13,9 @@ ${padLine()}${getWelcomePrompt()}
 ${getPresets()}
 ${padLine()}${getWhatToPress()}
 ${padLine()}${getPrompt()} `)
-}`
-
+    }`
+  )
+}
 
 function getTitle(): string {
   const text = `WELCOME TO THE GAME!`
@@ -43,4 +45,4 @@ function getWhatToPress(): string {
   return `(Press ${key} to select ${coloredRange})\n`
 }
 
-export default welcomeMessage
+export default getWelcomeMessage
