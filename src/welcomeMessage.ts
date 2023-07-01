@@ -2,29 +2,28 @@ import kleur from 'kleur'
 import { getPrompt, range, padLine } from './menu'
 import { formatThousands } from './utils'
 
-const getWelcomeMessage = (omitTitle: boolean = false) => {
+const getWelcomeMessage = (omitTitle: boolean) => {
   return (
 `${kleur.magenta(
-`\n${omitTitle ? '' : padLine() + getTitle()}
-
-
-${padLine()}${getWelcomePrompt()}
+`\n${omitTitle ?  '' : getTitle()}
+${getWelcomePrompt()}
 
 ${getPresets()}
-${padLine()}${getWhatToPress()}
-${padLine()}${getPrompt()} `)
+${getWhatToPress()}
+${getPrompt()} `)
     }`
   )
 }
 
 function getTitle(): string {
-  const text = `WELCOME TO THE GAME!`
+  const text = `${padLine()}WELCOME TO THE GAME!\n`
   return kleur.green(kleur.bold(text))
 }
 
 function getWelcomePrompt(): string {
   const text = `Please select a range option by entering the corresponding number:`
-  return kleur.magenta(kleur.bold(kleur.underline(text)))
+  const coloredText = kleur.magenta(kleur.bold(kleur.underline(`${text}`)))
+  return `${padLine()}${coloredText}`
 }
 
 function getPresets(): string {
@@ -42,7 +41,7 @@ function getWhatToPress(): string {
   const key = kleur.bold(kleur.magenta('ENTER'))
   const coloredRange = kleur.green(range[0])
 
-  return `(Press ${key} to select ${coloredRange})\n`
+  return `${padLine()}(Press ${key} to select ${coloredRange})\n`
 }
 
 export default getWelcomeMessage
