@@ -63,7 +63,7 @@ const menu: Menu = {
 
   showOnGameOver: (guess: number, tries: number): void => {
     const coloredNumber = kleur.bold(kleur.bgMagenta(kleur.black(guess)))
-    const message = `\n  You guessed my number: ${coloredNumber} in ${tries} tries!`
+    const message = `\n${padLine()}You guessed my number: ${coloredNumber} in ${tries} tries!`
     const coloredMessage = kleur.green(kleur.bold(message))
 
     console.log(coloredMessage)
