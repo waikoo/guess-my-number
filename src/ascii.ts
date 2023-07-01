@@ -1,16 +1,7 @@
 import kleur from 'kleur'
 import { formatThousands } from './utils'
 import { range as rangePreset } from './menu'
-
-interface Padding {
-  [key: string]: number
-}
-
-interface AsciiOptions {
-  title: string
-  numRows: number
-  range?: string
-}
+import { AsciiOptions, Padding } from './types'
 
 export class AsciiMaker {
   private customRange: string | null

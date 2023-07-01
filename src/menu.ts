@@ -1,15 +1,5 @@
 const MENU_PADDING = 4
 
-enum RangePreset {
-  'ZeroToHundred' = '0-100',
-  'ZeroToThousand' = '0-1000',
-  'ZeroToTenThousand' = '0-10000',
-  'ZeroToHundredThousand' = '0-100000',
-  'ZeroToMillion' = '0-1000000',
-}
-type TRange = RangePreset[]
-const range: TRange = Object.values(RangePreset) as TRange;
-
 export const getPrompt = (prompt: string = ""): string => {
   return kleur.magenta(`${padLine()}${prompt}${kleur.green('---❯')} `)
 }
@@ -19,7 +9,9 @@ export const padLine = () => ''.padStart(MENU_PADDING, ' ')
 import kleur from 'kleur'
 import { handleError } from './error'
 import getWelcomeMessage from './welcomeMessage'
-import { Omit } from './game'
+import { Omit, TRange, RangePreset } from './types'
+
+const range: TRange = Object.values(RangePreset) as TRange;
 
 interface Menu {
   welcomeMessage(omitObject: Omit): string;

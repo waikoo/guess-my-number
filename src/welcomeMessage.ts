@@ -10,8 +10,8 @@ ${getWelcomePrompt()}
 
 ${getPresets()}
 ${getWhatToPress()}
-${getPrompt()} `)
-    }`
+${getPrompt()} `
+)}`
   )
 }
 

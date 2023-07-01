@@ -3,19 +3,7 @@ import { rl } from './readlineInterface';
 import { getPrompt, menu, range } from './menu'
 import { isValidChoice, getChosenPreset } from './utils';
 import * as crypto from 'crypto';
-
-export type Omit = {
-  title: boolean;
-  welcome: boolean;
-}
-
-export interface GameParams {
-  numberOfTries: number;
-  randomNumber: number;
-  range: string;
-  prompt: string;
-  omit: Omit;
-}
+import { GameParams } from './types'
 
 class Game {
   private gameParams: GameParams;

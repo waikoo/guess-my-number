@@ -1,12 +1,6 @@
 import kleur from 'kleur'
 import { formatThousands } from './utils'
-
-enum ErrorType {
-  Main = 'ERROR',
-  InvalidInput = 'Invalid input',
-  NotWithinRange = 'Not within range',
-  InvalidRange = 'Invalid range'
-}
+import { ErrorType } from './types'
 
 const handleError = (answer: string, range?: string): string => {
   let error = ''

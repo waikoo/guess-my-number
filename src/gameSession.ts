@@ -1,6 +1,6 @@
 import { menu } from './menu';
 import { rl } from './readlineInterface';
-import { GameParams } from './game';
+import { GameParams } from './types';
 import { AsciiMaker } from './ascii';
 
 export class GameSession {
