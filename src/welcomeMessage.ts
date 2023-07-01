@@ -4,12 +4,12 @@ import { formatThousands } from './utils'
 
 const welcomeMessage = 
 `${kleur.magenta(
-`${padLine()}${getTitle()}
+`\n${padLine()}${getTitle()}
 
 
 ${padLine()}${getWelcomePrompt()}
 
-${padLine()}${getPresets()}
+${getPresets()}
 ${padLine()}${getWhatToPress()}
 ${padLine()}${getPrompt()} `)
 }`
@@ -31,8 +31,8 @@ function getPresets(): string {
     const [start, end] = range.split('-')
 
     const coloredRange = `${kleur.green(start)} ${kleur.magenta('-')} ${kleur.green(formatThousands(end))}`
-    return `  ${coloredNumber}. ${coloredRange}`;
-  }).join('\n  ') + '\n'
+    return `${padLine()}${coloredNumber}. ${coloredRange}`;
+  }).join('\n') + '\n'
 
 }
 
