@@ -25,6 +25,7 @@ export class GameSession {
 
       const guess = Number(answer);
       if (guess === randomNumber) {
+        this.gameParams.omit.title = true;
         console.log(new AsciiMaker().getGameOverAscii())
         menu.showOnGameOver(guess, numberOfTries);
         return;
