@@ -1,34 +1,8 @@
 import kleur from 'kleur'
-import { formatThousands } from './utils'
-import { range as rangePreset } from './menu'
+import { formatRange, formatThousands } from './utils'
 import { AsciiOptions, Padding } from './types'
 
-export class AsciiMaker {
-  private customRange: string | null
-
-  constructor(range?: string | undefined) {
-    this.customRange = range || null
-  }
-
-  public getGameStartAscii() {
-    const startOptions: AsciiOptions = {
-      title: 'Guess My Number',
-      numRows: 4,
-      range: this.customRange || rangePreset[0],
-    }
-    return new Pattern(startOptions).getPattern()
-  }
-
-  public getGameOverAscii() {
-    const endOptions: AsciiOptions = {
-      title: 'YOU WIN!',
-      numRows: 3
-    }
-    return new Pattern(endOptions).getPattern()
-  }
-}
-
-class Pattern {
+export class Pattern {
   private pattern: {
     template: string
     jagged: string
@@ -67,7 +41,7 @@ class Pattern {
       '0-100000': 5,
       '0-10000': 5,
       '0-1000': 6,
-      '0-100': 7,
+      '0-100': 6,
     }
   }
 
@@ -75,7 +49,10 @@ class Pattern {
     const coloredPlacedTitle = this.placeInPattern(this.coloredTitle, 
       this.numRows === 4 ? 'Guess' : 'YOU WIN!'
     )
-    const coloredPlacedRange = this.placeInPattern(this.range.coloredCustom, this.range.custom || '')
+    const coloredPlacedRange = this.placeInPattern(
+      formatRange(this.range.coloredCustom), 
+      this.range.custom || ''
+    )
 
     const art = [this.pattern.coloredTemplate, coloredPlacedTitle]
     if (this.numRows === 4) art.push(coloredPlacedRange)
@@ -94,7 +71,9 @@ class Pattern {
     const padNr = this.padding[range]
     const isRange = range === '0-10000'
     const isUneven = this.numRows === 4 ? isRange : true
-    const stringWithEndPad = `${start}${this.getPadded(coloredString, padNr, isUneven)}${end}`
+    const stringWithEndPad = 
+      `${start}${this.getPadded(coloredString, padNr, isUneven)}${end}`
+
     return stringWithEndPad
   }
 
@@ -102,6 +81,7 @@ class Pattern {
     const pad = ' '.repeat(padding)
     const startPad = isUneven ? pad + ' ' : pad
     const textInPattern = `${startPad}${string}${pad}`
+
     return textInPattern
   }
 

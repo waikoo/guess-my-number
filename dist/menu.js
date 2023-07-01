@@ -4,30 +4,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.range = exports.menu = exports.padLine = exports.getPrompt = void 0;
-var RangePreset;
-(function (RangePreset) {
-    RangePreset["ZeroToHundred"] = "0-100";
-    RangePreset["ZeroToThousand"] = "0-1000";
-    RangePreset["ZeroToTenThousand"] = "0-10000";
-    RangePreset["ZeroToHundredThousand"] = "0-100000";
-    RangePreset["ZeroToMillion"] = "0-1000000";
-})(RangePreset || (RangePreset = {}));
-const range = Object.values(RangePreset);
-exports.range = range;
+const MENU_PADDING = 4;
 const getPrompt = (prompt = "") => {
-    return kleur_1.default.magenta(`${prompt}${kleur_1.default.green('---❯')} `);
+    return kleur_1.default.magenta(`${(0, exports.padLine)()}${prompt}${kleur_1.default.green('---❯')} `);
 };
 exports.getPrompt = getPrompt;
-const MENU_PADDING = 4;
 const padLine = () => ''.padStart(MENU_PADDING, ' ');
 exports.padLine = padLine;
 const kleur_1 = __importDefault(require("kleur"));
 const error_1 = require("./error");
-const welcomeMessage_1 = __importDefault(require("./welcomeMessage"));
+const getWelcomeMessage_1 = __importDefault(require("./getWelcomeMessage"));
+const types_1 = require("./types");
+const range = Object.values(types_1.RangePreset);
+exports.range = range;
 const menu = {
-    welcomeMessage: welcomeMessage_1.default,
-    prompt: (0, exports.getPrompt)(`${(0, exports.padLine)()}- Take a guess `),
-    endGamePrompt: (0, exports.getPrompt)(`\n${(0, exports.padLine)()}- Try again? (y/n)`),
+    welcomeMessage(omitObject) {
+        const { title, welcome } = omitObject;
+        return welcome ? '' : (0, getWelcomeMessage_1.default)(title);
+    },
+    prompt: (0, exports.getPrompt)(`- Take a guess `),
+    endGamePrompt: (0, exports.getPrompt)(`\n${(0, exports.padLine)()}- Try again? (${kleur_1.default.green(kleur_1.default.bold(`y`))}/${kleur_1.default.red(kleur_1.default.bold(`n`))}) `),
     showFeedback(randomNumber = 0, answer, range) {
         const guess = Number(answer);
         let feedback = '';
@@ -51,7 +47,7 @@ const menu = {
     },
     showOnGameOver: (guess, tries) => {
         const coloredNumber = kleur_1.default.bold(kleur_1.default.bgMagenta(kleur_1.default.black(guess)));
-        const message = `\n  You guessed my number: ${coloredNumber} in ${tries} tries!`;
+        const message = `\n${(0, exports.padLine)()}You guessed my number: ${coloredNumber} in ${tries} tries!`;
         const coloredMessage = kleur_1.default.green(kleur_1.default.bold(message));
         console.log(coloredMessage);
     },

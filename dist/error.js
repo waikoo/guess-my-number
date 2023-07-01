@@ -6,13 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleError = void 0;
 const kleur_1 = __importDefault(require("kleur"));
 const utils_1 = require("./utils");
-var ErrorType;
-(function (ErrorType) {
-    ErrorType["Main"] = "ERROR";
-    ErrorType["InvalidInput"] = "Invalid input";
-    ErrorType["NotWithinRange"] = "Not within range";
-    ErrorType["InvalidRange"] = "Invalid range";
-})(ErrorType || (ErrorType = {}));
+const types_1 = require("./types");
 const handleError = (answer, range) => {
     let error = '';
     if (range) {
@@ -21,9 +15,8 @@ const handleError = (answer, range) => {
         if (isOutOfRange(answer, range))
             error = getRangeError(range);
     }
-    else {
-        if (isPresetNotValid(answer))
-            error = getInvalidRangeError();
+    else if (isPresetNotValid(answer) || includesNonNumbers(answer)) {
+        error = getInvalidRangeError();
     }
     return error;
 };
@@ -32,7 +25,7 @@ const isPresetNotValid = (answer) => {
     return !/[1-5]/.test(answer);
 };
 const getInvalidRangeError = (range) => {
-    const type = ErrorType.InvalidRange;
+    const type = types_1.ErrorType.InvalidRange;
     const colorize = (range) => kleur_1.default.red(kleur_1.default.bold(range));
     const [rangeStart, rangeEnd] = getNumbersFromRange(range || '1-5');
     const feedback = `Try a range between ${colorize(rangeStart)} and ${colorize((0, utils_1.formatThousands)(rangeEnd.toString()))}`;
@@ -40,7 +33,7 @@ const getInvalidRangeError = (range) => {
 };
 const getErrorMessage = (type, feedback) => {
     const colorize = (error) => kleur_1.default.bgRed(kleur_1.default.black(kleur_1.default.bold(error)));
-    const message = `${ErrorType.Main}: ${type}`;
+    const message = `${types_1.ErrorType.Main}: ${type}`;
     return `${colorize(message)} ${feedback}\n`;
 };
 const includesNonNumbers = (answer) => {
@@ -50,7 +43,7 @@ const includesNonNumbers = (answer) => {
         || answer === '';
 };
 const getInvalidInputError = () => {
-    const type = ErrorType.InvalidInput;
+    const type = types_1.ErrorType.InvalidInput;
     const colorize = (text) => kleur_1.default.bold(kleur_1.default.red(text));
     const feedback = `Try a ${colorize("number")}.`;
     return getErrorMessage(type, feedback);
@@ -65,7 +58,7 @@ const isOutOfRange = (answer, range) => {
 };
 const getRangeError = (range) => {
     const colorize = (number) => kleur_1.default.bold(kleur_1.default.red(number));
-    const type = ErrorType.NotWithinRange;
+    const type = types_1.ErrorType.NotWithinRange;
     const [rangeStart, rangeEnd] = range.split('-');
     const feedback = `Try a number between ${colorize(rangeStart)} and ${colorize((0, utils_1.formatThousands)(rangeEnd))}.`;
     return getErrorMessage(type, feedback);

@@ -1,4 +1,4 @@
-import { GameSession } from './gameSession';
+import { GameSession } from './GameSession';
 import { rl } from './readlineInterface';
 import { getPrompt, menu, range } from './menu'
 import { isValidChoice, getChosenPreset } from './utils';

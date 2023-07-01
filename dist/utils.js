@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.padMenuLine = exports.getRange = exports.getChosenPreset = exports.isValidChoice = exports.formatThousands = void 0;
+exports.formatRange = exports.padMenuLine = exports.getRange = exports.getChosenPreset = exports.isValidChoice = exports.formatThousands = void 0;
+const kleur_1 = __importDefault(require("kleur"));
 const insertDots = (value) => {
     const reversed = value.split('').reverse();
     for (let i = 3; i < reversed.length; i += 4) {
@@ -18,7 +22,10 @@ const formatThousands = (number) => {
 };
 exports.formatThousands = formatThousands;
 const isValidChoice = (presetNum) => {
-    return presetNum >= 1 && presetNum <= 5;
+    const number = getChosenPreset(presetNum);
+    if (isNaN(number))
+        return false;
+    return number >= 1 && number <= 5;
 };
 exports.isValidChoice = isValidChoice;
 const getChosenPreset = (answer) => {
@@ -31,10 +38,14 @@ const getRange = (range, rangePreset) => {
     if (range === undefined)
         return null;
     return range;
-    // if (range === undefined) return rangePreset[0]
 };
 exports.getRange = getRange;
 const padMenuLine = (line) => {
     return line.padStart(4, ' ');
 };
 exports.padMenuLine = padMenuLine;
+function formatRange(range) {
+    const [start, end] = range.split('-');
+    return `${kleur_1.default.green(start)} ${kleur_1.default.magenta('-')} ${kleur_1.default.green(end)}`;
+}
+exports.formatRange = formatRange;

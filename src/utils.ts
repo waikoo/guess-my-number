@@ -1,3 +1,5 @@
+import kleur from "kleur";
+
 const insertDots = (value: string) => {
   const reversed = value.split('').reverse();
   for (let i = 3; i < reversed.length; i += 4) {
@@ -35,10 +37,17 @@ const padMenuLine = (line: string) => {
   return line.padStart(4, ' ')
 }
 
+function formatRange(range: string): string {
+  const [start, end] = range.split('-')
+
+  return `${kleur.green(start)} ${kleur.magenta('-')} ${kleur.green(end)}`
+}
+
 export {
   formatThousands,
   isValidChoice,
   getChosenPreset,
   getRange,
   padMenuLine,
+  formatRange
 }

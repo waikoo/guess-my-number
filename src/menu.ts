@@ -8,7 +8,7 @@ export const padLine = () => ''.padStart(MENU_PADDING, ' ')
 
 import kleur from 'kleur'
 import { handleError } from './error'
-import getWelcomeMessage from './welcomeMessage'
+import getWelcomeMessage from './getWelcomeMessage'
 import { Omit, TRange, RangePreset } from './types'
 
 const range: TRange = Object.values(RangePreset) as TRange;

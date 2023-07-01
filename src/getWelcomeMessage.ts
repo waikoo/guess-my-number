@@ -1,6 +1,6 @@
 import kleur from 'kleur'
 import { getPrompt, range, padLine } from './menu'
-import { formatThousands } from './utils'
+import { formatRange, formatThousands } from './utils'
 
 const getWelcomeMessage = (omitTitle: boolean) => {
   return (
@@ -39,9 +39,8 @@ function getPresets(): string {
 
 function getWhatToPress(): string {
   const key = kleur.bold(kleur.magenta('ENTER'))
-  const coloredRange = kleur.green(range[0])
 
-  return `${padLine()}(Press ${key} to select ${coloredRange})\n`
+  return `${padLine()}(Press ${key} to select ${formatRange(range[0])})\n`
 }
 
 export default getWelcomeMessage
