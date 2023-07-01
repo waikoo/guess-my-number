@@ -33,7 +33,7 @@ export class AsciiMaker {
       title: 'YOU WIN!',
       numRows: 3
     }
-    return '\n' + new Pattern(endOptions).getPattern()
+    return new Pattern(endOptions).getPattern()
   }
 }
 
@@ -82,7 +82,8 @@ class Pattern {
 
   public getPattern() {
     const coloredPlacedTitle = this.placeInPattern(this.coloredTitle, 
-    this.numRows === 4 ? 'Guess' : 'YOU WIN!')
+      this.numRows === 4 ? 'Guess' : 'YOU WIN!'
+    )
     const coloredPlacedRange = this.placeInPattern(this.range.coloredCustom, this.range.custom || '')
 
     const art = [this.pattern.coloredTemplate, coloredPlacedTitle]
@@ -92,6 +93,7 @@ class Pattern {
     return art
       .map(line => `    ${line}`)
       .join('\n')
+      .replace(/^/, '\n')
   }
 
   private placeInPattern(coloredString: string, range: string): string {
