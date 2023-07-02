@@ -67,7 +67,7 @@ In the future whenever you want to play, you just run the above command.
 - The game understands both syntaxes: `1.000` or `1000` for **one thousand**
 - Colors everywhere to provide better visual separation
 - Error handling for range selection and number guessing
->*If you find a loophole in the error handling, see [Contributing](#-contributing).*
+>*If you find a loophole in the error handling, see [Contributing](#contributing).*
 - The chance for infinite play by pressing the bold green `y` at the very end of each game.
 
 
