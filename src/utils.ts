@@ -1,6 +1,4 @@
 import kleur from "kleur";
-import { range } from './menu'
-import { handleError } from "./error";
 
 const insertDots = (value: string) => {
   const reversed = value.split('').reverse();
@@ -10,7 +8,11 @@ const insertDots = (value: string) => {
   return reversed.reverse().join('');
 };
 
-const formatThousands = (number: string) => {
+const formatThousands = (number: string | number) => {
+  if (typeof number === 'number') {
+    return insertDots(number.toString())
+  }
+
   if (number === '') return ''
   const [start, end] = number.split('-');
 
