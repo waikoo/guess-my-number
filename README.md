@@ -1,5 +1,5 @@
 # Guess My Number
-
+![Guess my number](assets/guess-my-number.gif)
 This is my version of the number guessing game seen in [The Rust Book](https://doc.rust-lang.org/book/) as I haven't used neither Node nor TypeScript for anything even as useful as a CLI game.
 
 ## Table of Contents
