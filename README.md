@@ -39,7 +39,7 @@ pnpm i
 ## Usage
 #### How to play
 
-### ==Option 1==
+### Option 1
 To start the game, run the following command:
 
 ```bash
@@ -47,7 +47,7 @@ pnpm start
 ```
 > *This will compile the code every time you run it leading to a couple of seconds lag.*
 
-### ==Option 2==
+### Option 2
 Instead of waiting it to compile every time you run the command you can also run the TypeScript compiler:
 ```bash
 tsc
@@ -67,7 +67,7 @@ In the future whenever you want to play, you just run the above command.
 - The game understands both syntaxes: `1.000` or `1000` for **one thousand**
 - Colors everywhere to provide better visual separation
 - Error handling for range selection and number guessing
->*If you find a loophole in the error handling, see [Contributing](##Contributing).*
+>*If you find a loophole in the error handling, see [Contributing](#-contributing).*
 - The chance for infinite play by pressing the bold green `y` at the very end of each game.
 
 
@@ -80,6 +80,12 @@ In the future whenever you want to play, you just run the above command.
 
 If you find any issues or have suggestions for improvements, feel free to open an issue or submit a pull request.
 
+## Special Thanks
+
+A heartfelt thank you to my wife for her invaluable contributions and support throughout this project. Her attention to detail and keen eye for design have helped polish it to perfection. 
+
+Check out her work on (Dribble)[https://dribbble.com/Lyonixa].
+
 ## License
 
-This project is licensed under the terms of the MIT License. The full text of the license can be found in the [LICENSE.txt](https://chat.openai.com/c/LICENSE.txt) file.
+This project is licensed under the terms of the MIT License. The full text of the license can be found in the [LICENSE.txt](LICENSE.txt) file.
