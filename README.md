@@ -84,7 +84,7 @@ If you find any issues or have suggestions for improvements, feel free to open a
 
 A heartfelt thank you to my wife for her invaluable contributions and support throughout this project. Her attention to detail and keen eye for design have helped polish it to perfection. 
 
-Check out her work on (Dribble)[https://dribbble.com/Lyonixa].
+Check out her work on [Dribble](https://dribbble.com/Lyonixa).
 
 ## License
 
