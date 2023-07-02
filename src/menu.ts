@@ -10,7 +10,7 @@ import kleur from 'kleur'
 import { handleError } from './error'
 import getWelcomeMessage from './getWelcomeMessage'
 import { Omit, TRange, RangePreset } from './types'
-import { isValidSegmented } from './utils'
+import { formatThousands, isValidSegmented } from './utils'
 
 const range: TRange = Object.values(RangePreset) as TRange;
 
@@ -52,9 +52,15 @@ const menu: Menu = {
     const isGuessSmall = guess < randomNumber
     const bgColor = isGuessSmall ? kleur.bgRed : kleur.bgYellow
 
-    let coloredGuess: string = bgColor(kleur.bold(kleur.black(guess)));
+    let coloredGuess: string = 
+      bgColor(
+        kleur.bold(kleur.black(
+          formatThousands(guess)
+        ))
+      );
+
     const bigOrSmall = isGuessSmall ? kleur.red('small!') : kleur.yellow('big!')
-    const message = `${coloredGuess} is too ${bigOrSmall}\n`
+    const message = `${coloredGuess.padStart(2, ' ').padEnd(2, ' ')} is too ${bigOrSmall}\n`
 
     return message
   },

@@ -15,6 +15,7 @@ const kleur_1 = __importDefault(require("kleur"));
 const error_1 = require("./error");
 const getWelcomeMessage_1 = __importDefault(require("./getWelcomeMessage"));
 const types_1 = require("./types");
+const utils_1 = require("./utils");
 const range = Object.values(types_1.RangePreset);
 exports.range = range;
 const menu = {
@@ -24,10 +25,13 @@ const menu = {
     },
     prompt: (0, exports.getPrompt)(`- Take a guess `),
     endGamePrompt: (0, exports.getPrompt)(`\n${(0, exports.padLine)()}- Try again? (${kleur_1.default.green(kleur_1.default.bold(`y`))}/${kleur_1.default.red(kleur_1.default.bold(`n`))}) `),
-    showFeedback(randomNumber = 0, answer, range) {
+    showFeedback(randomNumber = 0, answer, rangeStr) {
         const guess = Number(answer);
         let feedback = '';
-        const isError = (0, error_1.handleError)(answer, range);
+        // if (answer.includes('.') && isValidSegmented(answer, range)) {
+        //   return null
+        // }
+        const isError = (0, error_1.handleError)(answer, rangeStr);
         feedback = isError || this.getTip(randomNumber, guess);
         if (feedback)
             console.log(feedback);
@@ -37,7 +41,7 @@ const menu = {
             return null;
         const isGuessSmall = guess < randomNumber;
         const bgColor = isGuessSmall ? kleur_1.default.bgRed : kleur_1.default.bgYellow;
-        let coloredGuess = bgColor(kleur_1.default.bold(kleur_1.default.black(guess)));
+        let coloredGuess = bgColor(kleur_1.default.bold(kleur_1.default.black((0, utils_1.formatThousands)(guess))));
         const bigOrSmall = isGuessSmall ? kleur_1.default.red('small!') : kleur_1.default.yellow('big!');
         const message = `${coloredGuess} is too ${bigOrSmall}\n`;
         return message;

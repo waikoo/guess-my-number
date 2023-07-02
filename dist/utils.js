@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.formatRange = exports.padMenuLine = exports.getRange = exports.getChosenPreset = exports.isValidChoice = exports.formatThousands = void 0;
+exports.formatRange = exports.padMenuLine = exports.getRange = exports.getChosenPreset = exports.removeSegmentation = exports.isValidSegmented = exports.isValidChoice = exports.formatThousands = void 0;
 const kleur_1 = __importDefault(require("kleur"));
 const insertDots = (value) => {
     const reversed = value.split('').reverse();
@@ -13,6 +13,9 @@ const insertDots = (value) => {
     return reversed.reverse().join('');
 };
 const formatThousands = (number) => {
+    if (typeof number === 'number') {
+        return insertDots(number.toString());
+    }
     if (number === '')
         return '';
     const [start, end] = number.split('-');
@@ -49,3 +52,26 @@ function formatRange(range) {
     return `${kleur_1.default.green(start)} ${kleur_1.default.magenta('-')} ${kleur_1.default.green(end)}`;
 }
 exports.formatRange = formatRange;
+const isValidSegmented = (number, range) => {
+    const rangeCaps = range.map(number => number.split('-')[1]);
+    if (rangeCaps.some(num => number === num))
+        return true;
+    if (number[0] === '.' || number[number.length - 1] === '.') {
+        return false;
+    }
+    if (number.includes('-')) {
+        return number.split('-')[1].includes('.');
+    }
+    return number.includes('.');
+};
+exports.isValidSegmented = isValidSegmented;
+const removeSegmentation = (number) => {
+    if (Number(number.replaceAll('.', ''))) {
+        return number.replaceAll('.', '');
+    }
+    else {
+        return null;
+    }
+    // return handleError(number, range)
+};
+exports.removeSegmentation = removeSegmentation;

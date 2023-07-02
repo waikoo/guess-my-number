@@ -45,7 +45,5 @@ export class GameSession {
 
       menu.showFeedback(randomNumber, sanitizedUserInput, range);
     }
-
-
   }
 }
