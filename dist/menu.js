@@ -43,7 +43,7 @@ const menu = {
         const bgColor = isGuessSmall ? kleur_1.default.bgRed : kleur_1.default.bgYellow;
         let coloredGuess = bgColor(kleur_1.default.bold(kleur_1.default.black((0, utils_1.formatThousands)(guess))));
         const bigOrSmall = isGuessSmall ? kleur_1.default.red('small!') : kleur_1.default.yellow('big!');
-        const message = `${coloredGuess} is too ${bigOrSmall}\n`;
+        const message = `${coloredGuess.padStart(2, ' ').padEnd(2, ' ')} is too ${bigOrSmall}\n`;
         return message;
     },
     showError(option) {

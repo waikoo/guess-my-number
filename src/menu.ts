@@ -53,14 +53,15 @@ const menu: Menu = {
     const bgColor = isGuessSmall ? kleur.bgRed : kleur.bgYellow
 
     let coloredGuess: string = 
-      bgColor(
+      bgColor(' ' +
         kleur.bold(kleur.black(
           formatThousands(guess)
+          + ' ' 
         ))
       );
 
     const bigOrSmall = isGuessSmall ? kleur.red('small!') : kleur.yellow('big!')
-    const message = `${coloredGuess.padStart(2, ' ').padEnd(2, ' ')} is too ${bigOrSmall}\n`
+    const message = `${coloredGuess} is too ${bigOrSmall}\n`
 
     return message
   },
@@ -78,6 +79,5 @@ const menu: Menu = {
   },
 
 }
-
 
 export { menu, range, Menu, Omit }

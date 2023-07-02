@@ -68,7 +68,6 @@ const removeSegmentation = (number: string) => {
   } else {
     return null
   }
-  // return handleError(number, range)
 }
 
 export {

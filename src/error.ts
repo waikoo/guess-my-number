@@ -32,7 +32,7 @@ const getInvalidRangeError = (range?: string): string => {
 }
 
 const getErrorMessage = (type: string, feedback: string): string => {
-  const colorize = (error: string) => kleur.bgRed(kleur.black(kleur.bold(error)))
+  const colorize = (error: string) => kleur.bgRed(kleur.black(kleur.bold(' ' + error + ' ')))
   const message = `${ErrorType.Main}: ${type}`
 
   return `${colorize(message)} ${feedback}\n`
